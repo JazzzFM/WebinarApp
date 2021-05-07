@@ -2,7 +2,7 @@ retencion_atencion <- function(bd, horas){
   Asist <- bd %>% 
     dplyr::mutate(correo = as.factor(correo)) %>% 
     dplyr::group_by(correo) %>%
-    dplyr::mutate(fecha_max = max(hora_salida)) %>% ungroup() %>% 
+    dplyr::mutate(fecha_max = max(lubridate::ymd_hms(hora_salida))) %>% ungroup() %>% 
     dplyr::mutate(correo = forcats::fct_reorder(correo, fecha_max)) %>% 
     dplyr::select(correo, fecha, hora_entrada, hora_salida)
   
@@ -35,19 +35,23 @@ timel_pct_audiencia <- function(bd, horas){
   
   bd <- bd %>% 
     dplyr::group_by(correo) %>% 
-    dplyr::mutate(fecha_ini = min(hora_entrada), fecha_fin = max(hora_salida))
+    dplyr::mutate(
+      fecha_ini = min(lubridate::ymd_hms(hora_entrada)),
+      fecha_fin = max(lubridate::ymd_hms(hora_salida))
+      )
   
   df <- bd %>%
-    complete(fecha_fin = seq( 
+    tidyr::complete(fecha_fin = seq( 
       from=as.POSIXct(min(fecha_ini), tz="UTC"),
       to=as.POSIXct(max(fecha_fin), tz="UTC"),
       by="1 min"), fill = list(fecha_fin = NA)) %>% 
     ungroup %>% 
     distinct(correo, fecha_fin) %>% 
-    count(fecha_fin) %>% mutate(max = n == max(n)) %>% 
-    mutate(pct = n/max(n), abs = n, 
+    count(fecha_fin) %>% 
+    dplyr::mutate(max = n == max(n)) %>% 
+    dplyr::mutate(pct = n/max(n), abs = n, 
           color_pct = cut(pct,c(0,.25,.5,.75,.9,1), 
-                      c("(0%-25%]","(25%-50%]","(50%-75%]","(75%-90%]","(90%-100%]")))
+           c("(0%-25%]","(25%-50%]","(50%-75%]","(75%-90%]","(90%-100%]")))
   
   fechaWeb <- pull(bd, fecha)
   fechaCompleta <- paste(fechaWeb, horas, sep = " ")

@@ -42,8 +42,6 @@ usethis::use_package( "forcats" )
 usethis::use_package( "shinyFeedback" )
 usethis::use_package( "dbplyr" )
 usethis::use_package( "tidyr" )
-usethis::use_package( "magrittr" )
-usethis::use_package( "highcharter" )
 usethis::use_package( "lubridate" ) 
 usethis::use_package( "shinyTime" )
 

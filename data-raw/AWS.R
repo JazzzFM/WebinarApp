@@ -22,6 +22,7 @@ DBI::dbExecute(pool, "CREATE TABLE reporte_zoom_webinar (
   hora_entrada DATETIME,
   hora_salida DATETIME
 );")
+
 # DBI::dbRemoveTable(pool,"reporte_zoom_webinar")
 # reporte_zum <- list.files("data",pattern = ".csv") %>%
 #   imap(~read_csv(glue::glue("data/{.x}")) %>%

@@ -18,9 +18,12 @@ mod_procesar_descargar_ui <- function(id){
       dateInput(ns("fecha_webinar"), "Fecha del Webinar:", language = "es", weekstart = 1)
     ),
     column(width = 3, class = "shadowBox",
-           textInput(ns("hora_inicio"), "Hora de inicio del webinar:", value = "00:00 (formato 24 hrs)")
+      textInput(ns("hora_inicio"), "Hora de inicio del webinar:", value = "00:00 (formato 24 hrs)")
           ),
-    column(width = 6, class = "shadowBox", 
+    column(width = 3, class = "shadowBox",
+      numericInput(ns("skip_df"), "Cortar headers desde:", 10, min = 1, max = 100)
+    ),
+    column(width = 3, class = "shadowBox", 
       fileInput(ns('reporte_zoom'), 'Suba el reporte de zoom',
       accept = c('text/csv', 'text/comma-separated-values','.csv'))
     ),
@@ -85,7 +88,7 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
       return(NULL)
     
     df <- read.csv(inFile$datapath, header = T,
-            row.names = NULL, skip = 11) %>% 
+            row.names = NULL, skip = input$skip_df) %>% 
             tibble::as_tibble()
     
     colnames(df) <- colnames(df)[2:ncol(df)]     
@@ -107,7 +110,7 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
   })
   
   observeEvent(input$guardar, {
-    # shinyjs::disable("guardar")
+    shinyjs::disable("guardar")
 
     horas_w(
       tibble::tibble(
@@ -121,10 +124,6 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
                        lubridate::ymd_hms()
       ))
     
-    # DBI::dbWriteTable(pool, bd_horas_webinar, horas_w(), append = T)(
-    
-  
-    # DBI::dbWriteTable(pool, bd_reporte_zoom, df_reporte_zoom(), append = T)
     Si_Asistieron(
       df_reporte_zoom() %>% procesar_segmentacion(horas = horas_w(), hora_inicio = input$hora_inicio) 
       )
@@ -135,6 +134,9 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
       procesar_no_asistio(base_historico = bd$zum, bd = df_reporte_zoom())
       )
     #print(No_Asistieron())
+    
+    DBI::dbWriteTable(pool, bd_horas_webinar, horas_w(), append = T)
+    DBI::dbWriteTable(pool, bd_reporte_zoom, df_reporte_zoom(), append = T)
   })
   
   

@@ -10,14 +10,35 @@ Description: What the package does (one paragraph).
 License: What license is it under?
 Imports: 
     config,
+    DBI,
+    dbplyr,
+    dplyr,
+    DT,
     forcats,
+    gargoyle,
     golem,
-    highcharter,
+    htmltools,
     lubridate,
+    magrittr,
     pkgload,
+    pool,
+    purrr,
+    readr,
+    RMariaDB,
     shiny,
+    shinyalert,
+    shinyBS,
     shinycssloaders,
-    thinkr
+    shinydashboard,
+    shinyFeedback,
+    shinyjs,
+    shinyLP,
+    shinymanager,
+    shinythemes,
+    shinyTime,
+    shinyWidgets,
+    stringr,
+    tidyr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
