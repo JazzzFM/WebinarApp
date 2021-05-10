@@ -1,0 +1,13 @@
+name: webinarapp5
+title:
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 130
+bundleId: 24211
+url: https://datos.morant.com.mx:443/content/130/
+when: 1620422530.54378
+lastSyncTime: 1620422530.54381
+asMultiple: FALSE
+asStatic: FALSE

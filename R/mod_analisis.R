@@ -50,13 +50,13 @@ mod_analisis_server <- function(input, output, session, bd = bd){
   
   output$Atencion <- renderPlot({
     horas <- bd$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
-    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio == "Sí") %>%
+    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
       retencion_atencion(horas = horas)
   })
 
   output$porcentaje <- renderPlot({
     horas <- bd$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
-    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio == "Sí") %>%
+    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
       timel_pct_audiencia(horas = horas)
   })
 

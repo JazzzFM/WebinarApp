@@ -127,14 +127,11 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
     Si_Asistieron(
       df_reporte_zoom() %>% procesar_segmentacion(horas = horas_w(), hora_inicio = input$hora_inicio) 
       )
-    
-    #print(Si_Asistieron())
-    
+
     No_Asistieron(
       procesar_no_asistio(base_historico = bd$zum, bd = df_reporte_zoom())
       )
-    #print(No_Asistieron())
-    
+
     DBI::dbWriteTable(pool, bd_horas_webinar, horas_w(), append = T)
     DBI::dbWriteTable(pool, bd_reporte_zoom, df_reporte_zoom(), append = T)
   })

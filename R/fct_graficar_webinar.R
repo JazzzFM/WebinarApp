@@ -83,12 +83,14 @@ porcentaje_asistencia_vs_no <- function(bd){
     dplyr::summarise('Registrados' = n())
   
   MAXWEB <- bd %>%
+    dplyr::filter(Asistio != 'No') %>% 
     dplyr::group_by(correo, fecha) %>%
     dplyr::summarise('a' = n()) %>%
     dplyr::group_by(fecha) %>%
     dplyr::summarise('Sí asistieron' = n())
   
   NOWEB <- bd %>%
+    dplyr::filter(Asistio == 'No') %>% 
     dplyr::group_by(correo, fecha) %>%
     dplyr::summarise('a' = n()) %>%
     dplyr::group_by(fecha) %>%
@@ -97,7 +99,9 @@ porcentaje_asistencia_vs_no <- function(bd){
   historico <- dplyr::left_join(Registros, MAXWEB, by = "fecha") %>% dplyr::left_join(NOWEB, by = "fecha")
   longer_historico <- tidyr::pivot_longer(historico, Registrados:`No asistieron`, names_to = "categoria", values_to = "count")
   
- Graph <- longer_historico %>% filter(categoria != "Registrados") %>% group_by(fecha) %>%  mutate(perc = 100*count/sum(count)) %>%
+ Graph <- longer_historico %>%
+    filter(categoria != "Registrados") %>%
+    group_by(fecha) %>%  mutate(perc = 100*count/sum(count)) %>%
     ggplot(aes(x = fecha, y = perc, fill = categoria)) +  ylab("Porcentaje Asistencia vs No Asistencia") +
     geom_bar(stat='identity') + theme_minimal()
  
@@ -119,6 +123,7 @@ historico_asistencia_vs_no <- function(bd_webinar, horas){
     annotate(x = fechas[4], y = 30, geom = "label", hjust = 0.5, label = "Cuarto Webinar") +
     annotate(x = fechas[5], y = 30, geom = "label", hjust = 0.5, label = "Quinto Webinar") +
     annotate(x = fechas[6], y = 30, geom = "label", hjust = 0.5, label = "Sexto Webinar") +
+    annotate(x = fechas[7], y = 30, geom = "label", hjust = 0.5, label = "Septimo Webinar") +
     theme(legend.position="top") +
     theme_minimal()
   

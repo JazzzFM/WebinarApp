@@ -72,6 +72,7 @@ DBI::dbExecute(pool, "CREATE TABLE horas_webinar (
 #   preguntas = c('20:47:00', '14:13:00', '14:42:00', '21:20:00', '21:15:00', '21:25:00'),
 #   hora_webinar = c('2021/03/18 19:00:00', '2021/03/20 12:00:00', '2021/03/26 12:00:00', '2021/04/08 19:00:00', '2021/04/15 19:00:00', '2021/04/21 19:00:00') %>% as_datetime()
 #   )
+# DBI::dbExecute(pool, "UPDATE horas_webinar SET preguntas = '21:25:00' WHERE num_webinar = 7;")
 # DBI::dbWriteTable(pool, "horas_webinar", value = bd_horas_webinar, append = T)
 #  tbl(pool, "horas_webinar")
 #  
