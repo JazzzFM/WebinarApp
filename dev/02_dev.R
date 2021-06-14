@@ -27,7 +27,6 @@ usethis::use_package( "shinyjs" )
 usethis::use_package( "shiny" )
 usethis::use_package( "shinyalert" )
 usethis::use_package( "shinyWidgets" )
-usethis::use_package( "DBI" )
 usethis::use_package( "pool" )
 usethis::use_package( "shinycssloaders" )
 usethis::use_package( "DT" )
@@ -44,6 +43,9 @@ usethis::use_package( "dbplyr" )
 usethis::use_package( "tidyr" )
 usethis::use_package( "lubridate" ) 
 usethis::use_package( "shinyTime" )
+usethis::use_package( "highcharter" )
+usethis::use_package( "RSQLite" )
+usethis::use_package( "DBI" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/

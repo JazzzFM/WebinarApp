@@ -17,6 +17,7 @@ Imports:
     forcats,
     gargoyle,
     golem,
+    highcharter,
     htmltools,
     lubridate,
     magrittr,
@@ -25,6 +26,7 @@ Imports:
     purrr,
     readr,
     RMariaDB,
+    RSQLite,
     shiny,
     shinyalert,
     shinyBS,
@@ -48,3 +50,5 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)

@@ -39,13 +39,19 @@ mod_procesar_descargar_ui <- function(id){
            textInput(ns("historia_previa"), "Termino de historia previa:", value = "00:00 (formato 24 hrs)")
     ),
     column(width = 3, class = "shadowBox",
-           textInput(ns("tres_secretos"), "Termino de tres secretos:", value = "00:00 (formato 24 hrs)")
+           textInput(ns("secreto_1"), "Termino del primer secreto:", value = "00:00 (formato 24 hrs)")
+    ),
+    column(width = 3, class = "shadowBox",
+           textInput(ns("secreto_2"), "Termino del segundo secreto:", value = "00:00 (formato 24 hrs)")
+    ),
+    column(width = 3, class = "shadowBox",
+           textInput(ns("secreto_3"), "Termino del tercer secreto:", value = "00:00 (formato 24 hrs)")
     ),
     column(width = 3, class = "shadowBox",
            textInput(ns("oferta"), "Termino de oferta:", value = "00:00 (formato 24 hrs)")
     ),
     column(width = 3, class = "shadowBox",
-           textInput(ns("preguntas"), "Termino de ronda de preguntas:", value = "00:00 (formato 24 hrs)")
+           textInput(ns("preguntas"), "Termino de preguntas:", value = "00:00 (formato 24 hrs)")
     )
    )),
     fluidRow(
@@ -72,7 +78,7 @@ mod_procesar_descargar_ui <- function(id){
 #' procesar_descargar Server Function
 #'
 #' @noRd 
-mod_procesar_descargar_server <- function(input, output, session, bd = bd){
+mod_procesar_descargar_server <- function(input, output, session, BD){
   ns <- session$ns
   
   Si_Asistieron <- reactiveVal(NULL)
@@ -93,7 +99,7 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
     
     colnames(df) <- colnames(df)[2:ncol(df)]     
     df <- df[ , - ncol(df)] 
-    num <- bd$zum %>% select(num_webinar) %>% as.vector() %>% max()
+    num <- BD$zum %>% select(num_webinar) %>% as.vector() %>% max()
     
     df <- df %>%   
     filter(!Nombre.de.fuente %in% c('AMIGOS', 'Amigos'),
@@ -106,17 +112,20 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
     correo = Correo.electrónico, usuario = Nombre.de.usuario..nombre.original. ,
     hora_registro, hora_entrada, hora_salida)
     
+    
     return(df)
   })
   
   observeEvent(input$guardar, {
     shinyjs::disable("guardar")
-
     horas_w(
       tibble::tibble(
         num_webinar = df_reporte_zoom() %>% select(num_webinar) %>% as.vector() %>% max(),
         historia_previa = paste(input$historia_previa, "00", sep = ":"),  
         tres_secretos = paste(input$tres_secretos, "00", sep = ":"),
+        secreto_1 = paste(input$secreto_1, "00", sep = ":"),
+        secreto_2 = paste(input$secreto_2, "00", sep = ":"),
+        secreto_3 = paste(input$secreto_3, "00", sep = ":"),
         oferta = paste(input$oferta, "00", sep = ":"),
         preguntas = paste(input$preguntas, "00", sep = ":"),
         hora_webinar = paste(input$fecha_webinar, 
@@ -129,11 +138,15 @@ mod_procesar_descargar_server <- function(input, output, session, bd = bd){
       )
 
     No_Asistieron(
-      procesar_no_asistio(base_historico = bd$zum, bd = df_reporte_zoom())
+      procesar_no_asistio(base_historico = BD$zum, bd = df_reporte_zoom())
       )
-
-    DBI::dbWriteTable(pool, bd_horas_webinar, horas_w(), append = T)
-    DBI::dbWriteTable(pool, bd_reporte_zoom, df_reporte_zoom(), append = T)
+  
+    horas_webinar_bd <- dplyr::bind_rows(horas_webinar_bd, horas_w())
+    usethis::use_data(horas_webinar_bd, overwrite = TRUE)
+    
+    reporte_zoom_webinar_bd <- dplyr::bind_rows(reporte_zoom_webinar_bd, df_reporte_zoom())
+    usethis::use_data(reporte_zoom_webinar_bd, overwrite = TRUE)
+    
   })
   
   

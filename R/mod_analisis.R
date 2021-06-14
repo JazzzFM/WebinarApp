@@ -7,7 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList
-#' @import dplyr ggplot2 tidyr shinycssloaders lubridate magrittr
+#' @import dplyr ggplot2 tidyr shinycssloaders lubridate magrittr highcharter
 
 mod_analisis_ui <- function(id){
   ns <- NS(id)
@@ -24,10 +24,10 @@ mod_analisis_ui <- function(id){
              shinycssloaders::withSpinner(plotOutput(ns("porcentaje")))
       ),
       column(width =  12, class = "shadowBox",     
-             shinycssloaders::withSpinner(plotOutput(ns("porcentajesA")))
+             shinycssloaders::withSpinner(highchartOutput(ns("porcentajesA")))
       ),
       column(width =  12, class = "shadowBox",     
-             shinycssloaders::withSpinner(plotOutput(ns("NoAsistieron")))
+             shinycssloaders::withSpinner(highchartOutput(ns("NoAsistieron")))
       ))
     )
 }
@@ -35,11 +35,11 @@ mod_analisis_ui <- function(id){
 #' analisis Server Function
 #'
 #' @noRd 
-mod_analisis_server <- function(input, output, session, bd = bd){
+mod_analisis_server <- function(input, output, session, BD = BD){
   ns <- session$ns
   
-  observeEvent(bd$horas_web, {
-    num <- bd$horas_web %>% pull(num_webinar)
+  observeEvent(BD$horas_web, {
+    num <- BD$horas_web %>% pull(num_webinar)
     updateSelectizeInput(session, 'filtro',
                          choices = num,
                          selected = num,
@@ -49,23 +49,26 @@ mod_analisis_server <- function(input, output, session, bd = bd){
   # Gráficas ----------------------------------- 
   
   output$Atencion <- renderPlot({
-    horas <- bd$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
-    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
+    horas <-  BD$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
+    BD$zum %>% 
+      filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
       retencion_atencion(horas = horas)
   })
 
   output$porcentaje <- renderPlot({
-    horas <- bd$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
-    bd$zum %>% filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
-      timel_pct_audiencia(horas = horas)
+    horas <- BD$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
+    bd_si <- BD$zum %>% filter(num_webinar %in% !!input$filtro, Asistio != "No")
+    bd_r <- BD$zum %>% filter(num_webinar %in% !!input$filtro)
+
+      timel_pct_audiencia(bd_1 = bd_si, bd_2 = bd_r, horas = horas)
   })
 
-  output$porcentajesA <- renderPlot({
-    bd$zum %>% porcentaje_asistencia_vs_no()
+  output$porcentajesA <- renderHighchart({
+    BD$zum %>% porcentaje_asistencia_vs_no()
   })
 
-  output$NoAsistieron <- renderPlot({
-    bd$zum %>% historico_asistencia_vs_no(bd$horas_web)
+  output$NoAsistieron <- renderHighchart({
+   BD$zum %>% historico_asistencia_vs_no(BD$horas_web)
   })
   
 }

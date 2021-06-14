@@ -5,9 +5,9 @@ account: JazzzFM
 server: datos.morant.com.mx
 hostUrl: https://datos.morant.com.mx/__api__
 appId: 130
-bundleId: 24211
-url: https://datos.morant.com.mx:443/content/130/
-when: 1620422530.54378
-lastSyncTime: 1620422530.54381
+bundleId: 24421
+url: https://datos.morant.com.mx:443/webinar/
+when: 1623698721.07894
+lastSyncTime: 1623698721.07897
 asMultiple: FALSE
 asStatic: FALSE
