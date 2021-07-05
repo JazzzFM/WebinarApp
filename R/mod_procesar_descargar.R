@@ -100,10 +100,11 @@ mod_procesar_descargar_server <- function(input, output, session, BD){
     colnames(df) <- colnames(df)[2:ncol(df)]     
     df <- df[ , - ncol(df)] 
     num <- BD$zum %>% select(num_webinar) %>% as.vector() %>% max()
+    #browser()
     
     df <- df %>%   
-    filter(!Nombre.de.fuente %in% c('AMIGOS', 'Amigos'),
-           !Nombre %in% c('TEAM EMILIO', 'TEAM', 'test')) %>% 
+    #filter(!Nombre.de.fuente %in% c('AMIGOS', 'Amigos'),
+    #       !Nombre %in% c('TEAM EMILIO', 'TEAM', 'test')) %>% 
     mutate(num_webinar = num + 1, fecha = lubridate::as_date(input$fecha_webinar),
            hora_registro = lubridate::floor_date(lubridate::mdy_hms(Hora.de.registro), unit = "minute"),
            hora_entrada = lubridate::floor_date(lubridate::mdy_hms(Puesto.de.trabajo), unit = "minute"),
@@ -111,7 +112,6 @@ mod_procesar_descargar_server <- function(input, output, session, BD){
     select( num_webinar, fecha, Asistio = Asistió, Nombre, Apellido, telefono = Teléfono,
     correo = Correo.electrónico, usuario = Nombre.de.usuario..nombre.original. ,
     hora_registro, hora_entrada, hora_salida)
-    
     
     return(df)
   })
@@ -146,8 +146,8 @@ mod_procesar_descargar_server <- function(input, output, session, BD){
     
     reporte_zoom_webinar_bd <- dplyr::bind_rows(reporte_zoom_webinar_bd, df_reporte_zoom())
     usethis::use_data(reporte_zoom_webinar_bd, overwrite = TRUE)
-    
-  })
+  
+    })
   
   
   datasetInput <- reactive({

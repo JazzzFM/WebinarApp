@@ -49,7 +49,8 @@ mod_analisis_server <- function(input, output, session, BD = BD){
   # Gráficas ----------------------------------- 
   
   output$Atencion <- renderPlot({
-    horas <-  BD$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
+    #browser()
+    horas <- BD$horas_web %>% filter(num_webinar %in% !!input$filtro) %>% as.vector()
     BD$zum %>% 
       filter(num_webinar %in% !!input$filtro, Asistio != "No") %>%
       retencion_atencion(horas = horas)

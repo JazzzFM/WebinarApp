@@ -227,8 +227,9 @@ Graph <- df %>%
           list(point = list(x = datetime_to_timestamp(as.Date(fechas[7])), y =40, xAxis = 0, yAxis = 0), text = "Webinar 7"),
           list(point = list(x = datetime_to_timestamp(as.Date(fechas[8])), y =45, xAxis = 0, yAxis = 0), text = "Webinar 8"),
           list(point = list(x = datetime_to_timestamp(as.Date(fechas[9])), y =48, xAxis = 0, yAxis = 0), text = "Webinar 9"),
-          list(point = list(x = datetime_to_timestamp(as.Date(fechas[10])), y =48, xAxis = 0, yAxis = 0), text = "Webinar 10")
-          
+          list(point = list(x = datetime_to_timestamp(as.Date(fechas[10])), y =48, xAxis = 0, yAxis = 0), text = "Webinar 10"),
+          list(point = list(x = datetime_to_timestamp(as.Date(fechas[11])), y =50, xAxis = 0, yAxis = 0), text = "Webinar 11"),
+          list(point = list(x = datetime_to_timestamp(as.Date(fechas[12])), y =60, xAxis = 0, yAxis = 0), text = "Webinar 12")
         )
       )
     )
